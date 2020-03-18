@@ -5,14 +5,18 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.FragmentTransaction
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 class MainActivity : AppCompatActivity() {
 
     private val drawerToggle: ActionBarDrawerToggle by lazy {
-        ActionBarDrawerToggle(this,
-            drawerLayout,toolbar,R.string.app_name,R.string.app_name)
+        ActionBarDrawerToggle(
+            this,
+            drawerLayout, toolbar, R.string.app_name, R.string.app_name
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,13 +29,13 @@ class MainActivity : AppCompatActivity() {
             selectMenuOption(menuItem)
             true
         }
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             selectMenuOption(navigation_view.menu.findItem(R.id.action_tab))
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
+        when (item.itemId) {
             android.R.id.home -> {
                 drawerLayout.openDrawer(GravityCompat.START)
                 return true
@@ -40,16 +44,20 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun selectMenuOption(menuItem: MenuItem){
+    private fun selectMenuOption(menuItem: MenuItem) {
         menuItem.isChecked = true
         drawerLayout.closeDrawers()
         val title = menuItem.title.toString()
-        if(supportFragmentManager.findFragmentByTag(title) == null){
+        if (supportFragmentManager.findFragmentByTag(title) == null) {
             val firstLevelFragment = FirstLevelFragment.newInstance(title)
-            supportFragmentManager
+            val transaction = supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.content,firstLevelFragment,title)
-                .commit()
+                .replace(R.id.content, firstLevelFragment, title)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            if (content.childCount > 0) {
+                transaction.addToBackStack(null)
+            }
+            transaction.commit()
         }
     }
 
