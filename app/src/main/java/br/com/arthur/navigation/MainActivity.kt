@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.content,firstLevelFragment,title)
+                .commit()
         }
     }
 

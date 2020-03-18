@@ -12,12 +12,12 @@ class FirstLevelFragment : Fragment(){
     private var navigationType: String? = null
     private var actions = mutableMapOf<String,Class<*>>()
 
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 //        actions.put(getString(R.string.option_tab),TabsActivity::class.java)
 //        actions.put(getString(R.string.option_bottom),BottomNavActivity::class.java)
 //        actions.put(getString(R.string.option_pager),PagerActivity::class.java)
-//    }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,16 +27,17 @@ class FirstLevelFragment : Fragment(){
         return inflater.inflate(R.layout.fragment_first_level, container, false)
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        navigationType = arguments?.getString(EXTRA_TYPE)
-        button.setOnClickListener{
-            val key = navigationType
-            val clazz = actions[key]
-            startActivity(Intent(activity,clazz))
-        }
-        textView.text = navigationType
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+            navigationType = arguments?.getString(EXTRA_TYPE)
+            button.setOnClickListener{
+                val key = navigationType
+                val clazz = actions[key]
+                startActivity(Intent(activity,clazz))
+            }
+            textView.text = navigationType
     }
+
     companion object {
         private const val EXTRA_TYPE = "tipoNavegacao"
         fun newInstance(type: String): FirstLevelFragment{
